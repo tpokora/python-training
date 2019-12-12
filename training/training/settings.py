@@ -25,7 +25,7 @@ SECRET_KEY = '!ex!!@kz2_1t-0^cwwkg*=iq=)^_9nk$@#q*0c!tc96(uqcxd1'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', 'training-python.herokuapp.com']
 
 
 # Application definition
