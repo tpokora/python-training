@@ -7,7 +7,7 @@ class CoreHomeTests(TestCase):
     def test_home(self):
         client = Client()
 
-        response = client.get('/home/')
+        response = client.get('/')
         content = str(response.content)
         text = "<h1>Hello World</h1>"
         self.assertEqual(response.status_code, 200)
