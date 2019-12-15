@@ -12,7 +12,7 @@
 {% bootstrap_messages %}
 
 <head>
-    <title>Home Page - training-python</title>
+    <title>Users - training-python</title>
     <meta charset="utf-8"/>
 </head>
 
@@ -20,10 +20,10 @@
 <nav class="navbar navbar-expand navbar-dark bg-dark">
     <a class="navbar-brand" href="#">training-python</a>
     <ul class="navbar-nav mr-auto">
-      <li class="nav-item active">
-        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-      </li>
       <li class="nav-item">
+        <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item active">
         <a class="nav-link" href="/users">Users</a>
       </li>
     </ul>
@@ -31,10 +31,16 @@
 </nav>
 <div class="container">
     <div class="jumbotron">
-        <h1>{{msg}}</h1>
-        {% buttons %}
-        <button class="btn btn-primary">Button</button>
-        {% endbuttons %}
+        <h2>Users</h2>
+        {% if users %}
+        <ul>
+        {% for user in users %}
+            <li>{{ user.username }}</a></li>
+        {% endfor %}
+        </ul>
+        {% else %}
+            <p>No users registered.</p>
+        {% endif %}
     </div>
 </div>
 </body>
