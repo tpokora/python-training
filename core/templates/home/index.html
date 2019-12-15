@@ -14,9 +14,14 @@
 <head>
     <title>Home Page - training-python</title>
     <meta charset="utf-8"/>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'home/style.css' %}">
 </head>
 
 <body class="body" style="background-color:#f6f6f6">
+<nav class="navbar navbar-dark bg-dark">
+  <a class="navbar-brand" href="#">Home</a>
+</nav>
 <div class="container">
     <div class="jumbotron">
         <h1>{{msg}}</h1>
