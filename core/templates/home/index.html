@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+{# Load the tag library #}
+{% load bootstrap4 %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full' %}
+
+{# Display django.contrib.messages as Bootstrap alerts #}
+{% bootstrap_messages %}
+
+<head>
+    <title>Home Page - training-python</title>
+    <meta charset="utf-8"/>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'home/style.css' %}">
+</head>
+
+<body class="body" style="background-color:#f6f6f6">
+<nav class="navbar navbar-dark bg-dark">
+  <a class="navbar-brand" href="#">Home</a>
+</nav>
+<div class="container">
+    <div class="jumbotron">
+        <h1>{{msg}}</h1>
+        {% buttons %}
+        <button class="btn btn-primary">Button</button>
+        {% endbuttons %}
+    </div>
+</div>
+</body>
+
+</html>
