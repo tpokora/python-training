@@ -20,11 +20,11 @@
 <nav class="navbar navbar-expand navbar-dark bg-dark">
     <a class="navbar-brand" href="#">training-python</a>
     <ul class="navbar-nav mr-auto">
-      <li class="nav-item">
-        <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
-      </li>
       <li class="nav-item active">
-        <a class="nav-link" href="/users">Users</a>
+        <a class="nav-link" href="{% url 'core:index' %}">Home <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'core:users' %}">Users</a>
       </li>
     </ul>
   </div>
