@@ -3,6 +3,7 @@ from unittest import TestCase
 from django.test import Client
 from django.urls import reverse
 
+
 # Create your tests here.
 class CoreHomeTests(TestCase):
 
