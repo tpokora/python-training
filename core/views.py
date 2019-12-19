@@ -1,6 +1,6 @@
 # Create your views here.
 from django.contrib.auth.models import User
-from django.views.generic import TemplateView, ListView
+from django.views.generic import TemplateView, ListView, DetailView
 
 
 class IndexView(TemplateView):
@@ -19,3 +19,8 @@ class UsersListView(ListView):
     model = User
     context_object_name = 'users'
     queryset = User.objects.all()
+
+
+class UserDetailsView(DetailView):
+    template_name = 'home/user.html'
+    model = User

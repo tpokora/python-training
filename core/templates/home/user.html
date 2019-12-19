@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+{# Load the tag library #}
+{% load bootstrap4 %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full' %}
+
+{# Display django.contrib.messages as Bootstrap alerts #}
+{% bootstrap_messages %}
+
+<head>
+    <title>Users - training-python</title>
+    <meta charset="utf-8"/>
+</head>
+
+<body class="body" style="background-color:#f6f6f6">
+<nav class="navbar navbar-expand navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">training-python</a>
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item">
+        <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" href="/users">Users</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+<div class="container">
+    <div class="jumbotron">
+        <h2>User: {{ user.username }}</h2>
+    </div>
+</div>
+</body>
+
+</html>
