@@ -3,6 +3,7 @@
 
 {% load socialaccount %}
 {% providers_media_js%}
+{% get_social_accounts user as accounts %}
 
 {# Load the tag library #}
 {% load bootstrap4 %}
@@ -30,7 +31,7 @@
         <a class="nav-link" href="{% url 'core:users' %}">Users</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="{% provider_login_url 'google' %}">Login Google</a>
+        <a class="nav-link" href="{% provider_login_url 'google' %}">Login Google {{ accounts.google.0 }}</a>
       </li>
     </ul>
   </div>
