@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 
+{% load socialaccount %}
+{% providers_media_js%}
+
 {# Load the tag library #}
 {% load bootstrap4 %}
 
@@ -25,6 +28,9 @@
       </li>
       <li class="nav-item">
         <a class="nav-link" href="{% url 'core:users' %}">Users</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% provider_login_url 'google' %}">Login Google</a>
       </li>
     </ul>
   </div>
