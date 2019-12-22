@@ -20,32 +20,18 @@
 </head>
 
 <body class="body" style="background-color:#f6f6f6">
-<nav class="navbar navbar-expand navbar-dark bg-dark">
-    <a class="navbar-brand" href="#">training-python</a>
-    <ul class="navbar-nav mr-auto">
-      <li class="nav-item active">
-        <a class="nav-link" href="{% url 'core:index' %}">Home <span class="sr-only">(current)</span></a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="{% url 'core:users' %}">Users</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="{% provider_login_url 'google' %}">Login Google {{ accounts.google.0 }}</a>
-      </li>
-    </ul>
-  </div>
-</nav>
+{% include "home/navbar.html" %}
 <div class="container">
     <div class="jumbotron">
         <h2>Users</h2>
         {% if users %}
         <ul>
-        {% for user in users %}
+            {% for user in users %}
             <li>{{ user.username }}</a></li>
-        {% endfor %}
+            {% endfor %}
         </ul>
         {% else %}
-            <p>No users registered.</p>
+        <p>No users registered.</p>
         {% endif %}
     </div>
 </div>

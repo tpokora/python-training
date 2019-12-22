@@ -1,0 +1,26 @@
+{% load socialaccount %}
+{% providers_media_js%}
+{% if accounts != null %}
+{% get_social_accounts user as accounts %}
+{% endif %}
+
+<nav class="navbar navbar-expand navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">training-python</a>
+    <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+            <a class="nav-link" href="{% url 'core:index' %}">Home <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'core:users' %}">Users</a>
+        </li>
+
+    </ul>
+    <div class="mt-2 mt-md-0">
+        {% if user.username == '' %}
+        <a class="nav-link" href="{% provider_login_url 'google' %}">Login</a>
+        {% else %}
+        <a class="nav-link" href="{% url 'core:user' user.id %}">Logged as: {{ user.username }}</a>
+        {% endif %}
+
+    </div>
+</nav>
