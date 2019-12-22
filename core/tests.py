@@ -13,8 +13,10 @@ class CoreHomeTests(TestCase):
 
         response = client.get(reverse("core:index"))
         content = str(response.content)
-        text = "<h1>Hello World</h1>"
+        welcome = "<h1>Welcome!</h1>"
+        text = "<h2>Please login to view content</h2>"
         self.assertEqual(response.status_code, 200)
+        self.assertEqual(welcome in content, True)
         self.assertEqual(text in content, True)
 
     def test_users(self):

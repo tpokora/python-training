@@ -20,9 +20,12 @@
 {% include "home/navbar.html" %}
 <div class="container">
     <div class="jumbotron">
-        <h1>{{msg}}</h1>
+        <h1>Welcome!</h1>
+        <h2>Please login to view content</h2>
         {% buttons %}
-        <button class="btn btn-primary">Button</button>
+        {% load socialaccount %}
+        {% providers_media_js%}
+        <a class="btn btn-primary" href="{% provider_login_url 'google' %}">Login</a>
         {% endbuttons %}
     </div>
 </div>
