@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 
+{% load socialaccount %}
+{% providers_media_js%}
+
 {# Load the tag library #}
 {% load bootstrap4 %}
 
@@ -12,7 +15,7 @@
 {% bootstrap_messages %}
 
 <head>
-    <title>Home Page - training-python</title>
+    <title>Users - training-python</title>
     <meta charset="utf-8"/>
 </head>
 
@@ -20,13 +23,9 @@
 {% include "home/navbar.html" %}
 <div class="container">
     <div class="jumbotron">
-        <h1>Welcome!</h1>
-        <h2>Please login to view content</h2>
-        {% buttons %}
-        {% load socialaccount %}
-        {% providers_media_js%}
-        <a class="btn btn-primary" href="{% provider_login_url 'google' %}">Login</a>
-        {% endbuttons %}
+        <h2>{{ user.username }}</h2>
+        <hr />
+        <h3>Email: {{ user.email }}</h3>
     </div>
 </div>
 </body>
