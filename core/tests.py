@@ -67,6 +67,7 @@ class CoreHomeTests(TestCase):
         client = Client()
 
         user = self.create_test_user()
+        client.force_login(user=user)
         response = client.get(reverse("core:user", args=(user.id,)))
         content = str(response.content)
         user_header = "%s%s%s" % (self.H2_TAG, user.username, self.H2_TAG_CLOSE)
@@ -74,4 +75,11 @@ class CoreHomeTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(user_header in content, True,  "%s is not having %s" % (user_header, user.username))
         self.assertEqual(user_email in content, True, "%s is not having %s" % (user_email, user.email))
+
+    def test_user_pk_not_authorized(self):
+        client = Client()
+
+        response = client.get(reverse("core:user", args=(1,)))
+        self.assertEqual(response.status_code, 302)
+
 

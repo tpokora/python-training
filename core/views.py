@@ -1,5 +1,6 @@
 # Create your views here.
 from django.contrib.auth.models import User
+from django.shortcuts import redirect
 from django.views.generic import TemplateView, ListView, DetailView
 
 
@@ -17,3 +18,8 @@ class UsersListView(ListView):
 class UserDetailsView(DetailView):
     template_name = 'home/user.html'
     model = User
+
+    def get(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect('/')
+        return super().get(self, request, *args, **kwargs)
