@@ -6,7 +6,7 @@ from django.urls import reverse
 
 
 # Create your tests here.
-class CoreHomeTests(TestCase):
+class CoreTests(TestCase):
 
     H2_TAG = '<h2>'
     H2_TAG_CLOSE = '</h2>'
