@@ -25,7 +25,12 @@ class NotesTests(TestCase):
         test_note.save()
 
         saved_note = Note.objects.get(pk=test_note.id)
-        self.assertEqual(test_note == saved_note, True)
+        self.assertEqual(test_note.id == saved_note.id, True)
+        self.assertEqual(test_note.title == saved_note.title, True)
+        self.assertEqual(test_note.content == saved_note.content, True)
+        self.assertEqual(test_note.created.strftime("%Y-%m-%d %H:%M:%S") == saved_note.created.strftime("%Y-%m-%d %H:%M:%S"), True)
+        self.assertEqual(test_note.modified.strftime("%Y-%m-%d %H:%M:%S") == saved_note.modified.strftime("%Y-%m-%d %H:%M:%S"), True)
+        self.assertEqual(test_note.user == saved_note.user, True)
 
         saved_note.delete()
 
