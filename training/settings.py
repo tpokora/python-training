@@ -49,7 +49,8 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google',
 
     # my apps
-    'core'
+    'core',
+    'notes'
 ]
 
 MIDDLEWARE = [
