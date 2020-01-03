@@ -1,11 +1,13 @@
 from unittest import TestCase
 
-from django.contrib.auth.models import User
 from django.test import Client
 from django.urls import reverse
 
 
 # Create your tests here.
+from core.models import User
+
+
 class CoreTests(TestCase):
 
     H2_TAG = '<h2>'
