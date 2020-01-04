@@ -50,7 +50,13 @@
                     <p class="card-text">{{ note.content }}</p>
                     <h6 class="card-footer">{{ note.created | date:"Y-m-d H:i"}}</h6>
                     <hr />
-                    <a href="#">Delete</a>
+                    <a href="{% url 'notes:note_delete' note.id %}">Delete</a>
+                </div>
+            </div>
+        {% empty %}
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title">No notes</h5>
                 </div>
             </div>
         {% endfor %}

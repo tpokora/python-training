@@ -42,3 +42,11 @@ def note_add(request):
     note.save()
     return redirect('/notes/user')
 
+
+def note_delete(request, note_id):
+    if not request.user.is_authenticated:
+        return redirect('/')
+    note = Note.objects.filter(pk=note_id)
+    note.delete()
+    return redirect('/notes/user')
+
