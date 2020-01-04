@@ -24,8 +24,12 @@
 <div class="container">
     <div class="jumbotron">
         <h2>{{ user.username }}</h2>
+        {% if request.user.id == request.resolver_match.kwargs.pk %}
+            <p>Your <a href="{% url 'notes:user_notes' %}">notes</a></p>
+        {% endif %}
         <hr />
-        <h3>Email: {{ user.email }}</h3>
+        <p>Email: {{ user.email }}</p>
+        <hr />
     </div>
 </div>
 </body>
