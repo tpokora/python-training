@@ -25,6 +25,21 @@
     <div class="jumbotron">
         <h2>{{ user.username }}</h2>
         <hr/>
+        <h5>Create new note</h5>
+        <form>
+            <div class="row">
+                <div class="col-md-4">
+                    <input type="text" class="form-control" placeholder="Note Title">
+                </div>
+                <div class="col-md-7">
+                    <input type="text" class="form-control" placeholder="Note content">
+                </div>
+                <div class="col-md-1">
+                    <button type="submit" class="btn btn-primary">Add</button>
+                </div>
+            </div>
+        </form>
+        <hr/>
         <div class="card-deck">
         {% for note in user_notes %}
             <div class="card text-center">
