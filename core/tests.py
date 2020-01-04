@@ -9,12 +9,7 @@ from core.models import User
 
 
 class CoreTests(TestCase):
-
-    H2_TAG = '<h2>'
-    H2_TAG_CLOSE = '</h2>'
-    H3_TAG = '<h3>'
-    H3_TAG_CLOSE = '</h3>'
-
+    
     @staticmethod
     def create_test_user():
         user = User.objects.filter(username='testUser')
@@ -25,6 +20,14 @@ class CoreTests(TestCase):
             user.save()
             user = User.objects.filter(username='testUser')
         return user.get()
+
+
+class CoreViewTests(TestCase):
+
+    H2_TAG = '<h2>'
+    H2_TAG_CLOSE = '</h2>'
+    H3_TAG = '<h3>'
+    H3_TAG_CLOSE = '</h3>'
 
     def test_home_user_not_authorized(self):
         client = Client()
@@ -37,7 +40,7 @@ class CoreTests(TestCase):
     def test_home_user_is_authorized(self):
         client = Client()
 
-        user = self.create_test_user()
+        user = CoreTests.create_test_user()
         client.force_login(user=user)
         response = client.get(reverse("core:index"))
         content = self.get_home(response)
@@ -68,7 +71,7 @@ class CoreTests(TestCase):
     def test_user_pk1(self):
         client = Client()
 
-        user = self.create_test_user()
+        user = CoreTests.create_test_user()
         client.force_login(user=user)
         response = client.get(reverse("core:user", args=(user.id,)))
         content = str(response.content)
