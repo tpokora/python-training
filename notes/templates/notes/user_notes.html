@@ -24,13 +24,21 @@
 <div class="container">
     <div class="jumbotron">
         <h2>{{ user.username }}</h2>
-        <hr />
-        <h3>Notes:</h3>
-        <ul>
-            {% for note in user_notes %}
-            <li>{{ note.title }}</a></li>
-            {% endfor %}
-        </ul>
+        <hr/>
+        <div class="card-deck">
+        {% for note in user_notes %}
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title">{{ note.title }}</h5>
+                    <hr />
+                    <p class="card-text">{{ note.content }}</p>
+                    <h6 class="card-footer">{{ note.created | date:"Y-m-d H:i"}}</h6>
+                    <hr />
+                    <a href="#">Delete</a>
+                </div>
+            </div>
+        {% endfor %}
+        </div>
     </div>
 </div>
 </body>
