@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+{% load socialaccount %}
+{% providers_media_js%}
+
+{# Load the tag library #}
+{% load bootstrap4 %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full' %}
+
+{# Display django.contrib.messages as Bootstrap alerts #}
+{% bootstrap_messages %}
+
+<head>
+    <title>Users - training-python</title>
+    <meta charset="utf-8"/>
+</head>
+
+<body class="body" style="background-color:#f6f6f6">
+{% include "home/navbar.html" %}
+<div class="container">
+    <div class="jumbotron">
+        <h2>{{ user.username }}</h2>
+        <hr />
+        <h3>Notes:</h3>
+        <ul>
+            {% for note in user_notes %}
+            <li>{{ note.title }}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+</body>
+
+</html>
