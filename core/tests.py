@@ -34,7 +34,12 @@ class CoreViewTests(TestCase):
 
         login = "Login</a>"
         response = client.get(reverse("core:index"))
-        content = self.get_home(response)
+        content = str(response.content)
+        welcome = "<h1>Welcome!</h1>"
+        text = "<h2>Please login to view content</h2>"
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(welcome in content, True)
+        self.assertEqual(text in content, True)
         self.assertEqual(login in content, True)
 
     def test_home_user_is_authorized(self):
@@ -43,18 +48,14 @@ class CoreViewTests(TestCase):
         user = CoreTests.create_test_user()
         client.force_login(user=user)
         response = client.get(reverse("core:index"))
-        content = self.get_home(response)
-        logged_as = "Logged as: %s" % user.username
-        self.assertEqual(logged_as in content, True)
-
-    def get_home(self, response):
         content = str(response.content)
-        welcome = "<h1>Welcome!</h1>"
-        text = "<h2>Please login to view content</h2>"
+        welcome = "<h1>Welcome, %s!</h1>" % user.username
+        text = 'href="/user/%s"' % user.id
         self.assertEqual(response.status_code, 200)
         self.assertEqual(welcome in content, True)
         self.assertEqual(text in content, True)
-        return content
+        logged_as = "Logged as: %s" % user.username
+        self.assertEqual(logged_as in content, True)
 
     def test_users(self):
         client = Client()

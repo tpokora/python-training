@@ -20,13 +20,18 @@
 {% include "home/navbar.html" %}
 <div class="container">
     <div class="jumbotron">
-        <h1>Welcome!</h1>
-        <h2>Please login to view content</h2>
-        {% buttons %}
-        {% load socialaccount %}
-        {% providers_media_js%}
-        <a class="btn btn-primary" href="{% provider_login_url 'google' %}">Login</a>
-        {% endbuttons %}
+        {% if not request.user.is_authenticated %}
+            <h1>Welcome!</h1>
+            <h2>Please login to view content</h2>
+            {% buttons %}
+            {% load socialaccount %}
+            {% providers_media_js%}
+            <a class="btn btn-primary" href="{% provider_login_url 'google' %}">Login</a>
+            {% endbuttons %}
+        {% else %}
+            <h1>Welcome, {{ user.username }}!</h1>
+            <p>See your <a href="{% url 'core:user' user.id %}">profile</a></p>
+        {% endif %}
     </div>
 </div>
 </body>
