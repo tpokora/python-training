@@ -26,13 +26,14 @@
         <h2>{{ user.username }}</h2>
         <hr/>
         <h5>Create new note</h5>
-        <form>
+        <form action="{% url 'notes:note_add' %}" method="post">
+            {% csrf_token %}
             <div class="row">
                 <div class="col-md-4">
-                    <input type="text" class="form-control" placeholder="Note Title">
+                    <input type="text" class="form-control" placeholder="Note Title" name="title">
                 </div>
                 <div class="col-md-7">
-                    <input type="text" class="form-control" placeholder="Note content">
+                    <input type="text" class="form-control" placeholder="Note content" name="content">
                 </div>
                 <div class="col-md-1">
                     <button type="submit" class="btn btn-primary">Add</button>
