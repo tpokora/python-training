@@ -56,6 +56,8 @@ class CoreViewTests(TestCase):
         self.assertEqual(text in content, True)
         logged_as = "Logged as: %s" % user.username
         self.assertEqual(logged_as in content, True)
+        logout = "Logout"
+        self.assertEqual(logout in content, True)
 
     def test_users(self):
         client = Client()
