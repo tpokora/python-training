@@ -13,3 +13,13 @@ class Note(models.Model):
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
     )
+
+    @staticmethod
+    def fill(data, user):
+        note = Note()
+        note.user = user
+        note.title = data['title']
+        note.content = data['content']
+        note.created = datetime.now()
+        return note
+

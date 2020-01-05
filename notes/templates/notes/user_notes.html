@@ -25,15 +25,22 @@
     <div class="jumbotron">
         <h2>{{ user.username }}</h2>
         <hr/>
+        {% if submitted %}
+        <div class="alert alert-success" role="alert">
+            Note added!
+        </div>
+        {% endif %}
         <h5>Create new note</h5>
-        <form action="{% url 'notes:note_add' %}" method="post">
+        <form action="add" method="post">
             {% csrf_token %}
             <div class="row">
                 <div class="col-md-4">
-                    <input type="text" class="form-control" placeholder="Note Title" name="title">
+                    <input type="text" class="form-control" placeholder="Note Title" name="title" id="id_title"
+                           required>
                 </div>
                 <div class="col-md-7">
-                    <input type="text" class="form-control" placeholder="Note content" name="content">
+                    <input type="text" class="form-control" placeholder="Note content" name="content" id="id_content"
+                           required>
                 </div>
                 <div class="col-md-1">
                     <button type="submit" class="btn btn-primary">Add</button>
@@ -42,24 +49,24 @@
         </form>
         <hr/>
         <div class="card-deck">
-        {% for note in user_notes %}
+            {% for note in user_notes %}
             <div class="card text-center">
                 <div class="card-body">
                     <h5 class="card-title">{{ note.title }}</h5>
-                    <hr />
+                    <hr/>
                     <p class="card-text">{{ note.content }}</p>
                     <h6 class="card-footer">{{ note.created | date:"Y-m-d H:i"}}</h6>
-                    <hr />
+                    <hr/>
                     <a href="{% url 'notes:note_delete' note.id %}">Delete</a>
                 </div>
             </div>
-        {% empty %}
+            {% empty %}
             <div class="card text-center">
                 <div class="card-body">
                     <h5 class="card-title">No notes</h5>
                 </div>
             </div>
-        {% endfor %}
+            {% endfor %}
         </div>
     </div>
 </div>

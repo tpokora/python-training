@@ -5,6 +5,7 @@ from django.shortcuts import render, redirect
 # Create your views here.
 from django.views.generic import ListView, TemplateView
 
+from notes.forms import NoteForm
 from notes.models import Note
 
 
@@ -32,15 +33,11 @@ class UserNotesView(ListView):
         # notes.append(note)
         # return notes
 
-
-def note_add(request):
-    note = Note()
-    note.user = request.user
-    note.title = request.POST['title']
-    note.content = request.POST['content']
-    note.created = datetime.now()
-    note.save()
-    return redirect('/notes/user')
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['submitted'] = 'submitted' in self.request.GET
+        context['form'] = NoteForm()
+        return context
 
 
 def note_delete(request, note_id):
