@@ -1,4 +1,4 @@
-from datetime import datetime
+import datetime
 from unittest import TestCase
 
 # Create your tests here.
@@ -18,7 +18,8 @@ class NotesTests(TestCase):
         note.user = user
         note.title = 'Test note Title'
         note.content = 'Test note content Test note content Test note content Test note content'
-        note.created = datetime.now()
+        note.due = datetime.datetime.now() + datetime.timedelta(days=3)
+        note.created = datetime.datetime.now()
         return note
 
     def test_create_note_for_user(self):
@@ -40,12 +41,14 @@ class NotesTests(TestCase):
 
     def test_note_fill(self):
         user = CoreTests.create_test_user()
-        note_data = {'title': 'test title', 'content': 'test content'}
+        note_data = {'title': 'test title', 'content': 'test content', 'due': datetime.datetime.now()}
         note = Note.fill(note_data, user)
 
         self.assertEqual(note.title == note_data['title'], True)
         self.assertEqual(note.content == note_data['content'], True)
-        self.assertEqual(note.created.strftime(DATE_TIME_FORMAT) == datetime.now().strftime(DATE_TIME_FORMAT),
+        self.assertEqual(note.created.strftime(DATE_TIME_FORMAT) == datetime.datetime.now().strftime(DATE_TIME_FORMAT),
+                         True)
+        self.assertEqual(note.due.strftime(DATE_TIME_FORMAT) == note_data['due'].strftime(DATE_TIME_FORMAT),
                          True)
         self.assertEqual(note.user == user, True)
 
