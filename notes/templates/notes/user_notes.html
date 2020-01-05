@@ -31,16 +31,26 @@
         </div>
         {% endif %}
         <h5>Create new note</h5>
-        <form action="add" method="post">
+        <form class="needs-validation"action="add" method="post">
             {% csrf_token %}
             <div class="row">
                 <div class="col-md-4">
                     <input type="text" class="form-control" placeholder="Note Title" name="title" id="id_title"
                            required>
+                    {% if errors.title %}
+                        <div class="invalid-feedback" style="display: block">
+                            {{ errors.title.0 }}
+                        </div>
+                    {% endif %}
                 </div>
                 <div class="col-md-7">
                     <input type="text" class="form-control" placeholder="Note content" name="content" id="id_content"
                            required>
+                    {% if errors.content %}
+                        <div class="invalid-feedback" style="display: block">
+                            {{ errors.content.0 }}
+                        </div>
+                    {% endif %}
                 </div>
                 <div class="col-md-1">
                     <button type="submit" class="btn btn-primary">Add</button>

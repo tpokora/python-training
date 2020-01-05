@@ -38,5 +38,17 @@ class NotesTests(TestCase):
 
         self.assertRaises(Note.DoesNotExist, Note.objects.get, pk=saved_note.id)
 
+    def test_note_fill(self):
+        user = CoreTests.create_test_user()
+        note_data = {'title': 'test title', 'content': 'test content'}
+        note = Note.fill(note_data, user)
+
+        self.assertEqual(note.title == note_data['title'], True)
+        self.assertEqual(note.content == note_data['content'], True)
+        self.assertEqual(note.created.strftime(DATE_TIME_FORMAT) == datetime.now().strftime(DATE_TIME_FORMAT),
+                         True)
+        self.assertEqual(note.user == user, True)
+
+
 
 

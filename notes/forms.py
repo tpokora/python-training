@@ -6,7 +6,7 @@ from notes.models import Note
 
 
 class NoteForm(forms.Form):
-    title = forms.CharField(max_length=50, min_length=5)
+    title = forms.CharField(max_length=50, min_length=3)
     content = forms.CharField(max_length=300)
 
 
@@ -20,8 +20,9 @@ def note_add(request):
             note.save()
             return HttpResponseRedirect('/notes/user?submitted=True')
         else:
+            errors = form.errors
             form = NoteForm()
             if 'submitted' in request.GET:
                 submitted = True
 
-        return render(request, 'notes/user_notes.html', {'form': form, 'submitted': submitted})
+        return render(request, 'notes/user_notes.html', {'form': form, 'submitted': submitted, 'errors': errors})
