@@ -1,7 +1,8 @@
 # Create your views here.
-from django.contrib.auth.models import User
 from django.shortcuts import redirect
 from django.views.generic import TemplateView, ListView, DetailView
+
+from core.models import User
 
 
 class IndexView(TemplateView):

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+{% load socialaccount %}
+{% providers_media_js%}
+
+{# Load the tag library #}
+{% load bootstrap4 %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full' %}
+
+{# Display django.contrib.messages as Bootstrap alerts #}
+{% bootstrap_messages %}
+
+<head>
+    <title>Users - training-python</title>
+    <meta charset="utf-8"/>
+</head>
+
+<body class="body" style="background-color:#f6f6f6">
+{% include "home/navbar.html" %}
+<div class="container">
+    <div class="jumbotron">
+        <h2>{{ user.username }}</h2>
+        <hr/>
+        {% if submitted %}
+        <div class="alert alert-success" role="alert">
+            Note added!
+        </div>
+        {% endif %}
+        <h5>Create new note</h5>
+        <form class="needs-validation"action="add" method="post">
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-md-4">
+                    <input type="text" class="form-control" placeholder="Note Title" name="title" id="id_title"
+                           required>
+                    {% if errors.title %}
+                        <div class="invalid-feedback" style="display: block">
+                            {{ errors.title.0 }}
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="col-md-7">
+                    <input type="text" class="form-control" placeholder="Note content" name="content" id="id_content"
+                           required>
+                    {% if errors.content %}
+                        <div class="invalid-feedback" style="display: block">
+                            {{ errors.content.0 }}
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="col-md-1">
+                    <button type="submit" class="btn btn-primary">Add</button>
+                </div>
+            </div>
+        </form>
+        <hr/>
+        <div class="card-deck">
+            {% for note in user_notes %}
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title">{{ note.title }}</h5>
+                    <hr/>
+                    <p class="card-text">{{ note.content }}</p>
+                    <h6 class="card-footer">{{ note.created | date:"Y-m-d H:i"}}</h6>
+                    <hr/>
+                    <a href="{% url 'notes:note_delete' note.id %}">Delete</a>
+                </div>
+            </div>
+            {% empty %}
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title">No notes</h5>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+</body>
+
+</html>

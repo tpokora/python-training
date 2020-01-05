@@ -49,7 +49,8 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google',
 
     # my apps
-    'core'
+    'core',
+    'notes'
 ]
 
 MIDDLEWARE = [
@@ -95,7 +96,7 @@ DATABASES = {
 
 DATABASES['default'] = dj_database_url.config()
 
-
+AUTH_USER_MODEL = 'core.User'
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
 
@@ -143,5 +144,6 @@ AUTHENTICATION_BACKENDS = (
 )
 SITE_ID = 1
 LOGIN_REDIRECT_URL = '/home'
+LOGOUT_REDIRECT_URL = '/home'
 
 django_heroku.settings(locals())

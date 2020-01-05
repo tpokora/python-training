@@ -1,18 +1,15 @@
 from unittest import TestCase
 
-from django.contrib.auth.models import User
 from django.test import Client
 from django.urls import reverse
 
 
 # Create your tests here.
-class CoreHomeTests(TestCase):
+from core.models import User
 
-    H2_TAG = '<h2>'
-    H2_TAG_CLOSE = '</h2>'
-    H3_TAG = '<h3>'
-    H3_TAG_CLOSE = '</h3>'
 
+class CoreTests(TestCase):
+    
     @staticmethod
     def create_test_user():
         user = User.objects.filter(username='testUser')
@@ -24,32 +21,43 @@ class CoreHomeTests(TestCase):
             user = User.objects.filter(username='testUser')
         return user.get()
 
+
+class CoreViewTests(TestCase):
+
+    H2_TAG = '<h2>'
+    H2_TAG_CLOSE = '</h2>'
+    H3_TAG = '<h3>'
+    H3_TAG_CLOSE = '</h3>'
+
     def test_home_user_not_authorized(self):
         client = Client()
 
         login = "Login</a>"
         response = client.get(reverse("core:index"))
-        content = self.get_home(response)
-        self.assertEqual(login in content, True)
-
-    def test_home_user_is_authorized(self):
-        client = Client()
-
-        user = self.create_test_user()
-        client.force_login(user=user)
-        response = client.get(reverse("core:index"))
-        content = self.get_home(response)
-        logged_as = "Logged as: %s" % user.username
-        self.assertEqual(logged_as in content, True)
-
-    def get_home(self, response):
         content = str(response.content)
         welcome = "<h1>Welcome!</h1>"
         text = "<h2>Please login to view content</h2>"
         self.assertEqual(response.status_code, 200)
         self.assertEqual(welcome in content, True)
         self.assertEqual(text in content, True)
-        return content
+        self.assertEqual(login in content, True)
+
+    def test_home_user_is_authorized(self):
+        client = Client()
+
+        user = CoreTests.create_test_user()
+        client.force_login(user=user)
+        response = client.get(reverse("core:index"))
+        content = str(response.content)
+        welcome = "<h1>Welcome, %s!</h1>" % user.username
+        text = 'href="/user/%s"' % user.id
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(welcome in content, True)
+        self.assertEqual(text in content, True)
+        logged_as = "Logged as: %s" % user.username
+        self.assertEqual(logged_as in content, True)
+        logout = "Logout"
+        self.assertEqual(logout in content, True)
 
     def test_users(self):
         client = Client()
@@ -66,7 +74,7 @@ class CoreHomeTests(TestCase):
     def test_user_pk1(self):
         client = Client()
 
-        user = self.create_test_user()
+        user = CoreTests.create_test_user()
         client.force_login(user=user)
         response = client.get(reverse("core:user", args=(user.id,)))
         content = str(response.content)
