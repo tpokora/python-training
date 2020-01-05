@@ -1,24 +1,26 @@
 # Create your views here.
-from django.contrib.auth.models import User
-from django.views.generic import TemplateView, ListView
+from django.shortcuts import redirect
+from django.views.generic import TemplateView, ListView, DetailView
+
+from core.models import User
 
 
 class IndexView(TemplateView):
     template_name = 'home/index.html'
 
-    message = 'Hello World'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['msg'] = self.message
-        return context
-
 
 class UsersListView(ListView):
     template_name = 'home/users.html'
     model = User
+    context_object_name = 'users'
+    queryset = User.objects.all()
 
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['users'] = User.objects.all()
-        return context
+
+class UserDetailsView(DetailView):
+    template_name = 'home/user.html'
+    model = User
+
+    def get(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect('/')
+        return super().get(self, request, *args, **kwargs)

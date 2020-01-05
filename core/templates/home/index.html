@@ -17,24 +17,21 @@
 </head>
 
 <body class="body" style="background-color:#f6f6f6">
-<nav class="navbar navbar-expand navbar-dark bg-dark">
-    <a class="navbar-brand" href="#">training-python</a>
-    <ul class="navbar-nav mr-auto">
-      <li class="nav-item active">
-        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="/users">Users</a>
-      </li>
-    </ul>
-  </div>
-</nav>
+{% include "home/navbar.html" %}
 <div class="container">
     <div class="jumbotron">
-        <h1>{{msg}}</h1>
-        {% buttons %}
-        <button class="btn btn-primary">Button</button>
-        {% endbuttons %}
+        {% if not request.user.is_authenticated %}
+            <h1>Welcome!</h1>
+            <h2>Please login to view content</h2>
+            {% buttons %}
+            {% load socialaccount %}
+            {% providers_media_js%}
+            <a class="btn btn-primary" href="{% provider_login_url 'google' %}">Login</a>
+            {% endbuttons %}
+        {% else %}
+            <h1>Welcome, {{ user.username }}!</h1>
+            <p>See your <a href="{% url 'core:user' user.id %}">profile</a></p>
+        {% endif %}
     </div>
 </div>
 </body>
