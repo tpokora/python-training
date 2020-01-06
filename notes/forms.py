@@ -9,7 +9,9 @@ class NoteForm(forms.Form):
     title = forms.CharField(max_length=50, min_length=3)
     content = forms.CharField(max_length=300)
     due = forms.DateTimeField(
-        input_formats=['%d/%m/%Y %H:%M']
+        input_formats=['%Y-%m-%d %H:%M',
+                       '%Y-%m-%d'],
+        required=False
     )
 
 

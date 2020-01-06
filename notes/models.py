@@ -9,7 +9,7 @@ class Note(models.Model):
     modified = models.DateTimeField('modified', auto_now_add=True, blank=False)
     title = models.CharField(max_length=50)
     content = models.CharField(max_length=300)
-    due = models.DateTimeField('due', blank=True)
+    due = models.DateTimeField('due', blank=True, null=True)
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
