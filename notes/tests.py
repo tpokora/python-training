@@ -42,7 +42,8 @@ class NotesTests(TestCase):
     def test_note_fill(self):
         user = CoreTests.create_test_user()
         note_data = {'title': 'test title', 'content': 'test content', 'due': datetime.datetime.now()}
-        note = Note.fill(note_data, user)
+        note = Note()
+        note.fill(note_data, user)
 
         self.assertEqual(note.title == note_data['title'], True)
         self.assertEqual(note.content == note_data['content'], True)

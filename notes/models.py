@@ -15,13 +15,10 @@ class Note(models.Model):
         on_delete=models.CASCADE,
     )
 
-    @staticmethod
-    def fill(data, user):
-        note = Note()
-        note.user = user
-        note.title = data['title']
-        note.content = data['content']
-        note.due = data['due']
-        note.created = datetime.now()
-        return note
+    def fill(self, data, user):
+        self.user = user
+        self.title = data['title']
+        self.content = data['content']
+        self.due = data['due']
+        self.created = datetime.now()
 

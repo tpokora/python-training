@@ -21,7 +21,8 @@ def note_add(request):
         form = NoteForm(request.POST)
         if form.is_valid():
             note_data = form.cleaned_data
-            note = Note.fill(note_data, request.user)
+            note = Note()
+            note.fill(note_data, request.user)
             note.save()
             return HttpResponseRedirect('/notes/user?submitted=True')
         else:
