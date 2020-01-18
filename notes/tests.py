@@ -5,6 +5,7 @@ from unittest import TestCase
 from django.test import Client
 
 from core.tests import CoreTests
+from notes.forms import NoteForm
 from notes.models import Note
 
 DATE_TIME_FORMAT = "%Y-%m-%d %H:%M:%S"
@@ -52,6 +53,12 @@ class NotesTests(TestCase):
         self.assertEqual(note.due.strftime(DATE_TIME_FORMAT) == note_data['due'].strftime(DATE_TIME_FORMAT),
                          True)
         self.assertEqual(note.user == user, True)
+
+    def test_note_form_valid(self):
+        form_data = {'title': 'test title', 'content': 'test content', 'due': datetime.datetime.now()}
+        form = NoteForm(data=form_data)
+        self.assertTrue(form.is_valid())
+
 
 
 
