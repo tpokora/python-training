@@ -25,11 +25,11 @@
     <div class="jumbotron">
         <h2>{{ user.username }}</h2>
         {% if request.user.id == request.resolver_match.kwargs.pk %}
-            <p>Your <a href="{% url 'notes:user_notes' %}">notes</a></p>
+        <p>Your <a href="{% url 'notes:user_notes' %}">notes</a></p>
         {% endif %}
-        <hr />
+        <hr/>
         <p>Email: {{ user.email }}</p>
-        <hr />
+        <hr/>
     </div>
 </div>
 </body>
