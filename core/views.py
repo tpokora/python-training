@@ -3,7 +3,7 @@ from django.shortcuts import redirect
 from django.views.generic import TemplateView, ListView, DetailView
 
 from core.models import User
-from notes.models import NoteQuerySet
+from notes.utils import NoteUtils
 
 
 class IndexView(TemplateView):
@@ -11,9 +11,7 @@ class IndexView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        if not self.request.user.is_authenticated:
-            return context
-        context['notes_due_quantity'] = len(NoteQuerySet.get_user_past_due_notes(self.request.user).all())
+        NoteUtils.context_add_user_past_due_notes(context, self.request)
         return context
 
 
@@ -23,10 +21,20 @@ class UsersListView(ListView):
     context_object_name = 'users'
     queryset = User.objects.all()
 
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        NoteUtils.context_add_user_past_due_notes(context, self.request)
+        return context
+
 
 class UserDetailsView(DetailView):
     template_name = 'home/user.html'
     model = User
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        NoteUtils.context_add_user_past_due_notes(context, self.request)
+        return context
 
     def get(self, request, *args, **kwargs):
         if not request.user.is_authenticated:

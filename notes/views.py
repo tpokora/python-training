@@ -7,6 +7,7 @@ from django.views.generic import ListView, TemplateView
 
 from notes.forms import NoteForm
 from notes.models import Note
+from notes.utils import NoteUtils
 
 
 class UserNotesView(ListView):
@@ -35,6 +36,7 @@ class UserNotesView(ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
+        NoteUtils.context_add_user_past_due_notes(context, self.request)
         context['submitted'] = 'submitted' in self.request.GET
         context['form'] = NoteForm()
         return context
