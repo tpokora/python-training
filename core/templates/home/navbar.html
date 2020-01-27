@@ -17,14 +17,19 @@
     </ul>
     <div class="mt-2 mt-md-0">
         {% if not request.user.is_authenticated %}
-            <span class="navbar-text">
+        <span class="navbar-text">
                 <a class="nav-link" href="{% provider_login_url 'google' %}">Login</a>
             </span>
         {% else %}
-            <span class="navbar-text">
+        {% if notes_due_quantity > 0 %}
+        <a href="{% url 'notes:user_notes' %}" type="button" class="btn btn-primary">
+            Notifications <span class="badge badge-danger">{{ notes_due_quantity }}</span>
+        </a>
+        {% endif %}
+        <span class="navbar-text">
                 <a class="nav-link" href="{% url 'core:user' user.id %}">Logged as: {{ user.username }}</a>
             </span>
-            <span class="navbar-text">
+        <span class="navbar-text">
                 <a class="nav-link" href="{% url 'core:logout' %}">Logout</a>
             </span>
         {% endif %}
