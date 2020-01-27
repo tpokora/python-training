@@ -8,6 +8,11 @@ from notes.models import Note
 class NoteForm(forms.Form):
     title = forms.CharField(max_length=50, min_length=3)
     content = forms.CharField(max_length=300)
+    due = forms.DateTimeField(
+        input_formats=['%Y-%m-%d %H:%M',
+                       '%Y-%m-%d'],
+        required=False
+    )
 
 
 def note_add(request):
@@ -16,7 +21,8 @@ def note_add(request):
         form = NoteForm(request.POST)
         if form.is_valid():
             note_data = form.cleaned_data
-            note = Note.fill(note_data, request.user)
+            note = Note()
+            note.fill(note_data, request.user)
             note.save()
             return HttpResponseRedirect('/notes/user?submitted=True')
         else:

@@ -17,6 +17,7 @@ class CoreTests(TestCase):
             user = User()
             user.username = 'testUser'
             user.password = 'testPassword'
+            user.email = 'testUser@email.com'
             user.save()
             user = User.objects.filter(username='testUser')
         return user.get()
@@ -24,10 +25,14 @@ class CoreTests(TestCase):
 
 class CoreViewTests(TestCase):
 
+    H1_TAG = '<h1>'
+    H1_TAG_CLOSE = '</h1>'
     H2_TAG = '<h2>'
     H2_TAG_CLOSE = '</h2>'
     H3_TAG = '<h3>'
     H3_TAG_CLOSE = '</h3>'
+    P_TAG = '<p>'
+    P_TAG_CLOSE = '</p>'
 
     def test_home_user_not_authorized(self):
         client = Client()
@@ -35,8 +40,8 @@ class CoreViewTests(TestCase):
         login = "Login</a>"
         response = client.get(reverse("core:index"))
         content = str(response.content)
-        welcome = "<h1>Welcome!</h1>"
-        text = "<h2>Please login to view content</h2>"
+        welcome = "{}Welcome!{}".format(self.H1_TAG, self.H1_TAG_CLOSE)
+        text = "{}Please login to view content{}".format(self.H2_TAG, self.H2_TAG_CLOSE)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(welcome in content, True)
         self.assertEqual(text in content, True)
@@ -49,7 +54,7 @@ class CoreViewTests(TestCase):
         client.force_login(user=user)
         response = client.get(reverse("core:index"))
         content = str(response.content)
-        welcome = "<h1>Welcome, %s!</h1>" % user.username
+        welcome = "{}Welcome, {}!{}".format(self.H1_TAG, user.username, self.H1_TAG_CLOSE)
         text = 'href="/user/%s"' % user.id
         self.assertEqual(response.status_code, 200)
         self.assertEqual(welcome in content, True)
@@ -65,7 +70,7 @@ class CoreViewTests(TestCase):
         users = User.objects.all()
         response = client.get(reverse("core:users"))
         content = str(response.content)
-        header = "<h2>Users</h2>"
+        header = "{}Users{}".format(self.H2_TAG, self.H2_TAG_CLOSE)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(header in content, True)
         for user in users:
@@ -79,7 +84,7 @@ class CoreViewTests(TestCase):
         response = client.get(reverse("core:user", args=(user.id,)))
         content = str(response.content)
         user_header = "%s%s%s" % (self.H2_TAG, user.username, self.H2_TAG_CLOSE)
-        user_email = "%sEmail: %s%s" % (self.H3_TAG, user.email, self.H3_TAG_CLOSE)
+        user_email = "%sEmail: %s%s" % (self.P_TAG, user.email, self.P_TAG_CLOSE)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(user_header in content, True,  "%s is not having %s" % (user_header, user.username))
         self.assertEqual(user_email in content, True, "%s is not having %s" % (user_email, user.email))
