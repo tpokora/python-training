@@ -22,9 +22,7 @@
             </span>
         {% else %}
         {% if notes_due_quantity > 0 %}
-        <a href="{% url 'notes:user_notes' %}" type="button" class="btn btn-primary">
-            Notifications <span class="badge badge-danger">{{ notes_due_quantity }}</span>
-        </a>
+        {% include "notes/notifications_reminder.html" %}
         {% endif %}
         <span class="navbar-text">
                 <a class="nav-link" href="{% url 'core:user' user.id %}">Logged as: {{ user.username }}</a>

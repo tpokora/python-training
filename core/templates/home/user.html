@@ -27,11 +27,6 @@
         {% if request.user.id == request.resolver_match.kwargs.pk %}
         <p>
             Your <a href="{% url 'notes:user_notes' %}">notes</a>
-            {% if notes_due_quantity > 0 %}
-            <a href="{% url 'notes:user_notes' %}" type="button" class="btn btn-primary">
-                Notifications <span class="badge badge-danger">{{ notes_due_quantity }}</span>
-            </a>
-            {% endif %}
         </p>
         {% endif %}
         <hr/>
