@@ -23,18 +23,7 @@
 {% include "home/navbar.html" %}
 <div class="container">
     <div class="jumbotron">
-        <h2>{{ user.username }}</h2>
-        {% if request.user.id == request.resolver_match.kwargs.pk %}
-        <p>
-            User <a href="{% url 'core:user_configuration' %}">configuration</a>
-        </p>
-        <p>
-            Your <a href="{% url 'notes:user_notes' %}">notes</a>
-        </p>
-        {% endif %}
-        <hr/>
-        <p>Email: {{ user.email }}</p>
-        <hr/>
+        <h2>Configuration</h2>
     </div>
 </div>
 </body>
