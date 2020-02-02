@@ -13,6 +13,18 @@ DATE_TIME_FORMAT = "%Y-%m-%d %H:%M:%S"
 
 class NotesTests(TestCase):
 
+    def test_note__str__(self):
+        user = CoreTests.create_test_user()
+        note_data = {'title': 'test title', 'content': 'test content', 'due': datetime.datetime.now()}
+        note = Note()
+        note.fill(note_data, user)
+        note.pk = 1
+
+        expected_note_str = "id: {}, title: {}, content: {}, user: '{}'" \
+            .format(note.pk, note.title, note.content, note.user.__str__())
+
+        self.assertEqual(note.__str__(), expected_note_str, True)
+
     def test_create_note_for_user(self):
         user = CoreTests.create_test_user()
         test_note = NoteTestsHelper.create_note(user)
@@ -22,8 +34,10 @@ class NotesTests(TestCase):
         self.assertEqual(test_note.id == saved_note.id, True)
         self.assertEqual(test_note.title == saved_note.title, True)
         self.assertEqual(test_note.content == saved_note.content, True)
-        self.assertEqual(test_note.created.strftime(DATE_TIME_FORMAT) == saved_note.created.strftime(DATE_TIME_FORMAT), True)
-        self.assertEqual(test_note.modified.strftime(DATE_TIME_FORMAT) == saved_note.modified.strftime(DATE_TIME_FORMAT), True)
+        self.assertEqual(test_note.created.strftime(DATE_TIME_FORMAT) == saved_note.created.strftime(DATE_TIME_FORMAT),
+                         True)
+        self.assertEqual(
+            test_note.modified.strftime(DATE_TIME_FORMAT) == saved_note.modified.strftime(DATE_TIME_FORMAT), True)
         self.assertEqual(test_note.user == saved_note.user, True)
 
         saved_note.delete()
@@ -51,7 +65,6 @@ class NotesTests(TestCase):
 
 
 class NoteQuerySetTests(TestCase):
-
     NOW = datetime.datetime.now()
 
     def test_get_notes_quantity(self):
@@ -73,7 +86,7 @@ class NoteQuerySetTests(TestCase):
         test_note_past_due.delete()
 
 
-class NoteTestsHelper():
+class NoteTestsHelper:
 
     @staticmethod
     def create_note(user):
@@ -84,11 +97,3 @@ class NoteTestsHelper():
         note.due = datetime.datetime.now() + datetime.timedelta(days=3)
         note.created = datetime.datetime.now()
         return note
-
-
-
-
-
-
-
-

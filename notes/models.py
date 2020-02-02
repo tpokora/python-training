@@ -24,7 +24,8 @@ class Note(models.Model):
         self.created = datetime.now()
 
     def __str__(self):
-        return 'title: {}, content: {}, user: {}'.format(self.title, self.content, self.user.username)
+        return "id: {}, title: {}, content: {}, user: '{}'" \
+            .format(self.pk, self.title, self.content, self.user.__str__())
 
 
 class NoteQuerySet(QuerySet):
@@ -34,8 +35,3 @@ class NoteQuerySet(QuerySet):
         now = datetime.now()
         past_due_notes = Note.objects.filter(user__id=user.id, due__lt=now)
         return past_due_notes.all()
-
-
-
-
-

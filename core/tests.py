@@ -3,13 +3,12 @@ from unittest import TestCase
 from django.test import Client
 from django.urls import reverse
 
-
 # Create your tests here.
-from core.models import User
+from core.models import User, UserConfiguration
 
 
 class CoreTests(TestCase):
-    
+
     @staticmethod
     def create_test_user():
         user = User.objects.filter(username='testUser')
@@ -22,9 +21,23 @@ class CoreTests(TestCase):
             user = User.objects.filter(username='testUser')
         return user.get()
 
+    def test_user__str__(self):
+        user = CoreTests.create_test_user()
+        expected_user_str = 'id: {}, username: {}, email: {}'.format(user.pk, user.username, user.email)
+
+        self.assertEqual(user.__str__(), expected_user_str, True)
+
+    def test_configuration__str__(self):
+        user = CoreTests.create_test_user()
+        configuration = UserConfiguration()
+        configuration.user = user
+
+        expected_conf_str = "user: '{}'".format(configuration.user.__str__())
+
+        self.assertEqual(configuration.__str__(), expected_conf_str, True)
+
 
 class CoreViewTests(TestCase):
-
     H1_TAG = '<h1>'
     H1_TAG_CLOSE = '</h1>'
     H2_TAG = '<h2>'
@@ -86,7 +99,7 @@ class CoreViewTests(TestCase):
         user_header = "%s%s%s" % (self.H2_TAG, user.username, self.H2_TAG_CLOSE)
         user_email = "%sEmail: %s%s" % (self.P_TAG, user.email, self.P_TAG_CLOSE)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(user_header in content, True,  "%s is not having %s" % (user_header, user.username))
+        self.assertEqual(user_header in content, True, "%s is not having %s" % (user_header, user.username))
         self.assertEqual(user_email in content, True, "%s is not having %s" % (user_email, user.email))
 
     def test_user_pk_not_authorized(self):
@@ -94,5 +107,3 @@ class CoreViewTests(TestCase):
 
         response = client.get(reverse("core:user", args=(1,)))
         self.assertEqual(response.status_code, 302)
-
-
