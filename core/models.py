@@ -15,6 +15,10 @@ class User(AbstractUser):
             configuration.user = self
             configuration.save()
 
+    def get_user_configuration(self):
+        configuration = UserConfiguration.objects.filter(user__id=self.pk)
+        return configuration.get()
+
 
 class Configuration:
     DEFAULT_CONFIGURATION = dict({'visible': True})
