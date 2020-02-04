@@ -35,6 +35,10 @@
         <hr/>
         <p>Email: {{ user.email }}</p>
         <hr/>
+        <h2>Configuration</h2>
+        {% for key, value in user.get_user_configuration.configuration.items %}
+            <p>{{key}} : {{ value }}</p>
+        {% endfor %}
     </div>
 </div>
 </body>
