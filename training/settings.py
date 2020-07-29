@@ -42,7 +42,9 @@ INSTALLED_APPS = [
     'rest_framework',
     
     # My apps
-    'core'
+    'core',
+    'weather_statistics',
+    'tracker'
 ]
 
 MIDDLEWARE = [
