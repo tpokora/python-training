@@ -1,10 +1,12 @@
-from django.db import models
-
-
 # Create your views here.
-from django.http import HttpResponse
+from rest_framework import viewsets
+
+from tracker.models import Track
+from tracker.serializers import TrackSerializer
 
 
-def index(request):
-    return HttpResponse("Tracker index page")
+class TrackerList(viewsets.ModelViewSet):
+
+    queryset = Track.objects.all()
+    serializer_class = TrackSerializer
 

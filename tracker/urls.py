@@ -1,7 +1,8 @@
-from django.urls import path, include
+from rest_framework.routers import DefaultRouter
 
-from tracker import views
+from tracker.views import TrackerList
 
-urlpatterns = [
-    path('', views.index, name='index'),
-]
+router = DefaultRouter()
+router.register(r'trackers', TrackerList, basename='tracker')
+
+urlpatterns = router.urls
