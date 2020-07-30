@@ -8,10 +8,7 @@ class Track(models.Model):
     description = models.CharField(max_length=300)
 
     def __str__(self):
-        return "{%s, %s, %s}" % (self.name, self.unit, self.description)
-
-    def __repr__(self):
-        return "Track{name=%s, unit=%s, description=%s}" % (self.name, self.unit, self.description)
+        return "Track{name='%s', unit='%s', description='%s'}" % (self.name, self.unit, self.description)
 
 
 class Record(models.Model):
@@ -20,4 +17,4 @@ class Record(models.Model):
     date = models.DateTimeField('date published')
 
     def __str__(self):
-        return "{%s}" % (self.value)
+        return "Record{value='%s', date='%s'}" % (self.value, self.date.__format__('%Y-%m-%d'))
