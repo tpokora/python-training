@@ -1,12 +1,13 @@
-from django.urls import path
-from rest_framework.urlpatterns import format_suffix_patterns
+from django.conf.urls import url
+from django.urls import include
+from rest_framework import routers
 
-from tracker.views import TrackerList, RecordList, RecordListByTrackerName
+from tracker import views
+
+router = routers.DefaultRouter()
+router.register(r'trackers', views.TrackerList)
+router.register(r'records', views.RecordList)
 
 urlpatterns = [
-    path('trackers/', TrackerList.as_view()),
-    path('records/', RecordList.as_view()),
-    path('records/<tracker_name>/', RecordListByTrackerName.as_view()),
+    url(r'^', include(router.urls)),
 ]
-
-urlpatterns = format_suffix_patterns(urlpatterns)
