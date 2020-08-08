@@ -10,9 +10,12 @@ class TrackSerializer(serializers.ModelSerializer):
 
 
 class RecordSerializer(serializers.ModelSerializer):
-    track = TrackSerializer()
-    date = serializers.DateTimeField(format='%Y-%m-%d')
+    date = serializers.DateTimeField(format='%Y-%m-%d', input_formats=['%Y-%m-%d'])
 
     class Meta:
         model = Record
         fields = ['id', 'value', 'date', 'track']
+
+    def to_representation(self, instance):
+        self.fields['track'] = TrackSerializer(read_only=True)
+        return super(RecordSerializer, self).to_representation(instance)
