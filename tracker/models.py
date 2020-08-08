@@ -14,7 +14,7 @@ class Track(models.Model):
 class Record(models.Model):
     track = models.ForeignKey(Track, on_delete=models.CASCADE)
     value = models.FloatField(default=0.0)
-    date = models.DateTimeField('date published')
+    date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return "Record{value='%s', date='%s'}" % (self.value, self.date.__format__('%Y-%m-%d'))

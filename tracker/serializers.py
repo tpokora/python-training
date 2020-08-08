@@ -1,13 +1,18 @@
 from rest_framework import serializers
 
-
-class TrackSerializer(serializers.Serializer):
-    name = serializers.CharField(max_length=30)
-    unit = serializers.CharField(max_length=30)
-    description = serializers.CharField(max_length=300)
+from tracker.models import Track, Record
 
 
-class RecordSerializer(serializers.Serializer):
-    value = serializers.FloatField(default=0.0)
-    date = serializers.DateTimeField(format='%Y-%m-%d')
+class TrackSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Track
+        fields = ['id', 'name', 'unit', 'description']
+
+
+class RecordSerializer(serializers.ModelSerializer):
     track = TrackSerializer()
+    date = serializers.DateTimeField(format='%Y-%m-%d')
+
+    class Meta:
+        model = Record
+        fields = ['id', 'value', 'date', 'track']
