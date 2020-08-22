@@ -20,5 +20,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('core.urls')),
     path('weather/', include('weather_statistics.urls')),
-    path('tracker/', include('tracker.urls'))
+    path('tracker/', include(('tracker.urls', 'tracker'), namespace='tracker'))
 ]

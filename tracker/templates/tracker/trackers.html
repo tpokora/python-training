@@ -28,7 +28,7 @@
         {% if trackers_list %}
             <ul class="list-group">
                 {% for tracker in trackers_list %}
-                    <li class="list-group-item">{{ tracker.name }}</li>
+                    <li class="list-group-item"><a href="{% url 'tracker:tracker_detail' tracker.id %}">{{ tracker.name }}</a></li>
                 {% endfor %}
             </ul>
         {% else %}
