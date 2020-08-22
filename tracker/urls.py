@@ -1,13 +1,16 @@
-from django.conf.urls import url
-from django.urls import include
+from django.urls import include, path
 from rest_framework import routers
 
 from tracker import views
+
+app_name = 'tracker'
 
 router = routers.DefaultRouter()
 router.register(r'trackers', views.TrackerList)
 router.register(r'records', views.RecordList)
 
 urlpatterns = [
-    url(r'^', include(router.urls)),
+    path('', views.TrackersView.as_view(), name='trackers'),
+    path('<int:pk>/', views.TrackerDetailView.as_view(), name='tracker_detail'),
+    path('api/', include(router.urls)),
 ]

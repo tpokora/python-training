@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+{# Load the tag library #}
+{% load bootstrap4 %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full' %}
+
+{# Display django.contrib.messages as Bootstrap alerts #}
+{% bootstrap_messages %}
+
+<head>
+    <title>Trackers Page - training-python</title>
+    <meta charset="utf-8"/>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'home/style.css' %}">
+</head>
+
+<body class="body" style="background-color:#f6f6f6">
+<nav class="navbar navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">Home</a>
+</nav>
+<div class="container">
+    <div class="jumbotron">
+        {% if track %}
+            <h2>{{ track.name }}</h2>
+            <h5>Description: {{ track.description }}</h5>
+            <p>Unit: {{ track.unit }}</p>
+            {% if records %}
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">Value</th>
+                        <th scope="col">Date</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for record in records %}
+                        <tr>
+                            <td>{{ record.value }}</td>
+                            <td>{{ record.date }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <h3>No records found</h3>
+            {% endif %}
+        {% else %}
+            <h2>No tracker found</h2>
+        {% endif %}
+    </div>
+</div>
+</body>
+
+</html>
