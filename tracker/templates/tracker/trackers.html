@@ -26,7 +26,7 @@
     <div class="jumbotron">
         <h1>Trackers</h1>
         {% if trackers_list %}
-            <ul class="list-group">
+            <ul id="trackers-list" class="list-group">
                 {% for tracker in trackers_list %}
                     <li class="list-group-item"><a href="{% url 'tracker:tracker_detail' tracker.id %}">{{ tracker.name }}</a></li>
                 {% endfor %}

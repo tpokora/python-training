@@ -1,6 +1,6 @@
 import datetime
 
-from django.test import TestCase
+from django.test import TestCase, Client
 
 # Create your tests here.
 from tracker.models import Track, Record
@@ -41,5 +41,31 @@ class RecordModelTests(TestCase):
         expected_repr = "<Record: Record{value='%s', date='%s'}>" % (value, date.strftime('%Y-%m-%d'))
         self.assertEqual(expected_repr, repr(record))
 
+
+####################################
+# Views tests
+####################################
+
+class TrackersViewTests(TestCase):
+
+    def test_trackers(self):
+        client = Client()
+
+        response = client.get('/tracker/')
+        content = str(response.content)
+        trackers_header = "<h1>Trackers</h1>"
+        trackers_list = '<ul id="trackers-list" class="list-group">'
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(trackers_header in content, True)
+        self.assertEqual(trackers_list in content, True)
+
+    def test_tracker_detail(self):
+        client = Client()
+
+        response = client.get('/tracker/1/')
+        content = str(response.content)
+        trackers_header = "<h2>Romek</h2>"
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(trackers_header in content, True)
 
 
