@@ -62,9 +62,11 @@ class TrackersViewTests(TestCase):
     def test_tracker_detail(self):
         client = Client()
 
+        tracker = Track.objects.filter(pk=1)
+
         response = client.get('/tracker/1/')
         content = str(response.content)
-        trackers_header = "<h2>Romek</h2>"
+        trackers_header = "<h2>%s</h2>" % tracker[0].name
         self.assertEqual(response.status_code, 200)
         self.assertEqual(trackers_header in content, True)
 
