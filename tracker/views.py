@@ -4,6 +4,7 @@ from rest_framework import viewsets
 from rest_framework.decorators import permission_classes
 from rest_framework.permissions import AllowAny
 
+from tracker.forms import TrackerForm
 from tracker.models import Track, Record
 from tracker.serializers import TrackSerializer, RecordSerializer
 
@@ -15,6 +16,11 @@ class TrackersView(generic.ListView):
 
     def get_queryset(self):
         return Track.objects.all()
+
+    def get_context_data(self, **kwargs):
+        context = super(TrackersView, self).get_context_data()
+        context['form'] = TrackerForm()
+        return context
 
 
 class TrackerDetailView(generic.DetailView):
