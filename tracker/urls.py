@@ -11,6 +11,7 @@ router.register(r'records', views.RecordList)
 
 urlpatterns = [
     path('', views.TrackersView.as_view(), name='trackers'),
+    path('create', views.create_tracker, name='create_tracker'),
     path('<int:pk>/', views.TrackerDetailView.as_view(), name='tracker_detail'),
     path('api/', include(router.urls)),
 ]

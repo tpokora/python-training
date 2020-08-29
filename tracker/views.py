@@ -1,4 +1,6 @@
 # Create your views here.
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 from django.views import generic
 from rest_framework import viewsets
 from rest_framework.decorators import permission_classes
@@ -21,6 +23,15 @@ class TrackersView(generic.ListView):
         context = super(TrackersView, self).get_context_data()
         context['form'] = TrackerForm()
         return context
+
+
+def create_tracker(request):
+    tracker = Track()
+    tracker.name = request.POST['name']
+    tracker.unit = request.POST['unit']
+    tracker.description = request.POST['description']
+    tracker.save()
+    return HttpResponseRedirect(reverse('tracker:trackers'))
 
 
 class TrackerDetailView(generic.DetailView):
