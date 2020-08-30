@@ -38,6 +38,13 @@
         <div>
             <form action="{% url 'tracker:create_tracker' %}" method="post">
                 {% csrf_token %}
+                {% if form_error %}
+                    <div class="form-row">
+                        <div class="form-group col-md-3">
+                            <span class="text-danger">{{ form_error }}</span>
+                        </div>
+                    </div>
+                {% endif %}
                 <div class="form-row">
                     <div class="form-group col-md-3">
                         {{ form.name.errors }}

@@ -1,5 +1,6 @@
 # Create your views here.
 from django.http import HttpResponseRedirect
+from django.shortcuts import render
 from django.urls import reverse
 from django.views import generic
 from rest_framework import viewsets
@@ -30,7 +31,14 @@ def create_tracker(request):
     tracker.name = request.POST['name']
     tracker.unit = request.POST['unit']
     tracker.description = request.POST['description']
-    tracker.save()
+    try:
+        tracker.save()
+    except Exception:
+        return render(request, 'tracker/trackers.html', {
+            'trackers_list': Track.objects.all(),
+            'form': TrackerForm(),
+            'form_error': "Error creating new tracking",
+        })
     return HttpResponseRedirect(reverse('tracker:trackers'))
 
 
