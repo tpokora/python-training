@@ -93,6 +93,18 @@ class TrackersViewTests(TestCase):
         self.assertEqual(trackers_list in content, True)
         self.assertEqual(error_msg in content, True)
 
+    def test_create_tracker_get(self):
+        client = Client()
+
+        response = client.get(reverse('tracker:create_tracker'))
+        content = str(response.content)
+        trackers_header = "<h1>Trackers</h1>"
+        trackers_list = '<ul id="trackers-list" class="list-group">'
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(trackers_header in content, True)
+        self.assertEqual(trackers_list in content, True)
+
 
 class TrackerDetailViewTests(TestCase):
 
@@ -120,4 +132,29 @@ class TrackerDetailViewTests(TestCase):
         self.assertEqual(trackers_header in content, True)
         self.assertEqual(str(data['value']) in content, True)
         self.assertEqual(data['datetime'] in content, True)
+
+    def test_tracker_create_record_get(self):
+        tracker = Track(name='testName', unit='g', description='testDescription')
+        tracker.save()
+
+        client = Client()
+        response = client.get('/tracker/%s/create_record' % tracker.id)
+        content = str(response.content)
+        trackers_header = "<h2>%s</h2>" % tracker.name
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(trackers_header in content, True)
+
+    def test_tracker_create_record_error(self):
+        tracker = Track(name='testName', unit='g', description='testDescription')
+        tracker.save()
+
+        client = Client()
+        data = {'value': 15, 'datetime': '2050'}
+        response = client.post('/tracker/%s/create_record' % tracker.id, data, follow=True)
+        content = str(response.content)
+        trackers_header = "<h2>%s</h2>" % tracker.name
+        error_msg = "Error adding record"
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(trackers_header in content, True)
+        self.assertEqual(error_msg in content, True)
 
