@@ -1,4 +1,5 @@
 # Create your views here.
+from django.db import IntegrityError
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
@@ -33,7 +34,7 @@ def create_tracker(request):
     tracker.description = request.POST['description']
     try:
         tracker.save()
-    except Exception:
+    except IntegrityError:
         return render(request, 'tracker/trackers.html', {
             'trackers_list': Track.objects.all(),
             'form': TrackerForm(),
