@@ -1,5 +1,5 @@
 # Create your views here.
-from django.db import IntegrityError
+from django.db import IntegrityError, transaction
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
@@ -33,12 +33,13 @@ def create_tracker(request):
     tracker.unit = request.POST['unit']
     tracker.description = request.POST['description']
     try:
-        tracker.save()
+        with transaction.atomic():
+            tracker.save()
     except IntegrityError:
         return render(request, 'tracker/trackers.html', {
             'trackers_list': Track.objects.all(),
             'form': TrackerForm(),
-            'form_error': "Error creating new tracking",
+            'form_error': "Tracking with name '%s' already exists" % (request.POST['name']),
         })
     return HttpResponseRedirect(reverse('tracker:trackers'))
 

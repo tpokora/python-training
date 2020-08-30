@@ -3,6 +3,8 @@ import datetime
 from django.test import TestCase, Client
 
 # Create your tests here.
+from django.urls import reverse
+
 from tracker.models import Track, Record
 
 
@@ -69,5 +71,37 @@ class TrackersViewTests(TestCase):
         trackers_header = "<h2>%s</h2>" % tracker[0].name
         self.assertEqual(response.status_code, 200)
         self.assertEqual(trackers_header in content, True)
+
+    def test_create_tracker(self):
+        client = Client()
+
+        data = {'name': 'testName', 'unit': 'g', 'description': 'testDescription'}
+        response = client.post(reverse('tracker:create_tracker'), data=data, follow=True)
+        content = str(response.content)
+        trackers_header = "<h1>Trackers</h1>"
+        trackers_list = '<ul id="trackers-list" class="list-group">'
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(trackers_header in content, True)
+        self.assertEqual(trackers_list in content, True)
+        self.assertEqual(data['name'] in content, True)
+
+    def test_create_tracker_error(self):
+        client = Client()
+
+        data = {'name': 'testName', 'unit': 'g', 'description': 'testDescription'}
+        tracker = Track(name=data['name'], unit=data['unit'], description=data['description'])
+        tracker.save()
+
+        response = client.post(reverse('tracker:create_tracker'), data=data)
+        content = str(response.content)
+        trackers_header = "<h1>Trackers</h1>"
+        trackers_list = '<ul id="trackers-list" class="list-group">'
+        error_msg = "Tracking with name &#39;%s&#39; already exists" % (data['name'])
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(trackers_header in content, True)
+        self.assertEqual(trackers_list in content, True)
+        self.assertEqual(error_msg in content, True)
 
 
