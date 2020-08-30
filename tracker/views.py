@@ -1,14 +1,16 @@
 # Create your views here.
+from datetime import datetime
+
 from django.db import IntegrityError, transaction
 from django.http import HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
 from django.views import generic
 from rest_framework import viewsets
 from rest_framework.decorators import permission_classes
 from rest_framework.permissions import AllowAny
 
-from tracker.forms import TrackerForm
+from tracker.forms import TrackerForm, RecordForm
 from tracker.models import Track, Record
 from tracker.serializers import TrackSerializer, RecordSerializer
 
@@ -52,7 +54,24 @@ class TrackerDetailView(generic.DetailView):
         context = super(TrackerDetailView, self).get_context_data(**kwargs)
         records = Record.objects.filter(track__id=context['track'].id)
         context['records'] = records
+        context['record_form'] = RecordForm()
         return context
+
+
+def add_record(request, tracker_id):
+    track = get_object_or_404(Track, pk=tracker_id)
+    if track is not None:
+        record = Record()
+        record.track = track
+        record.value = request.POST['value']
+        record.date = datetime.strptime(request.POST['datetime'], '%Y-%m-%d %H:%M')
+        record.save()
+
+    return HttpResponseRedirect(reverse('tracker:tracker_detail', args=(tracker_id,)))
+
+###############
+# REST APIs
+###############
 
 
 @permission_classes((AllowAny, ))

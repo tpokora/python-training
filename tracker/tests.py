@@ -61,17 +61,6 @@ class TrackersViewTests(TestCase):
         self.assertEqual(trackers_header in content, True)
         self.assertEqual(trackers_list in content, True)
 
-    def test_tracker_detail(self):
-        client = Client()
-
-        tracker = Track.objects.filter(pk=1)
-
-        response = client.get('/tracker/1/')
-        content = str(response.content)
-        trackers_header = "<h2>%s</h2>" % tracker[0].name
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(trackers_header in content, True)
-
     def test_create_tracker(self):
         client = Client()
 
@@ -104,4 +93,31 @@ class TrackersViewTests(TestCase):
         self.assertEqual(trackers_list in content, True)
         self.assertEqual(error_msg in content, True)
 
+
+class TrackerDetailViewTests(TestCase):
+
+    def test_tracker_detail(self):
+        tracker = Track(name='testName', unit='g', description='testDescription')
+        tracker.save()
+
+        client = Client()
+        response = client.get('/tracker/%s/' % tracker.id)
+        content = str(response.content)
+        trackers_header = "<h2>%s</h2>" % tracker.name
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(trackers_header in content, True)
+
+    def test_tracker_create_record(self):
+        tracker = Track(name='testName', unit='g', description='testDescription')
+        tracker.save()
+
+        client = Client()
+        data = {'value': 15, 'datetime': '2050-01-01 12:30'}
+        response = client.post('/tracker/%s/create_record' % tracker.id, data, follow=True)
+        content = str(response.content)
+        trackers_header = "<h2>%s</h2>" % tracker.name
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(trackers_header in content, True)
+        self.assertEqual(str(data['value']) in content, True)
+        self.assertEqual(data['datetime'] in content, True)
 

@@ -13,5 +13,6 @@ urlpatterns = [
     path('', views.TrackersView.as_view(), name='trackers'),
     path('create', views.create_tracker, name='create_tracker'),
     path('<int:pk>/', views.TrackerDetailView.as_view(), name='tracker_detail'),
+    path('<int:tracker_id>/create_record', views.add_record, name='tracker_create_record'),
     path('api/', include(router.urls)),
 ]
