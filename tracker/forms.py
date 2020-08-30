@@ -13,4 +13,4 @@ class TrackerForm(forms.Form):
 class RecordForm(forms.Form):
     value = forms.FloatField(label='Value', required=True, widget=forms.TextInput(attrs={'class': 'form-control'}))
     datetime = forms.DateTimeField(required=True, input_formats=['%Y-%m-%d %H:%M'],
-                               widget=forms.DateTimeInput(attrs={'class': 'form-control'}))
+                                   widget=forms.DateTimeInput(attrs={'class': 'form-control'}))

@@ -59,13 +59,12 @@ class TrackerDetailView(generic.DetailView):
 
 
 def add_record(request, tracker_id):
-    track = get_object_or_404(Track, pk=tracker_id)
-    if track is not None:
-        record = Record()
-        record.track = track
-        record.value = request.POST['value']
-        record.date = datetime.strptime(request.POST['datetime'], '%Y-%m-%d %H:%M')
-        record.save()
+    track = Track.objects.get(pk=tracker_id)
+    record = Record()
+    record.track = track
+    record.value = request.POST['value']
+    record.date = datetime.strptime(request.POST['datetime'], '%Y-%m-%d %H:%M')
+    record.save()
 
     return HttpResponseRedirect(reverse('tracker:tracker_detail', args=(tracker_id,)))
 
