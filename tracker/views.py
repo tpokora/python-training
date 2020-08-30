@@ -30,20 +30,27 @@ class TrackersView(generic.ListView):
 
 
 def create_tracker(request):
-    tracker = Track()
-    tracker.name = request.POST['name']
-    tracker.unit = request.POST['unit']
-    tracker.description = request.POST['description']
-    try:
-        with transaction.atomic():
-            tracker.save()
-    except IntegrityError:
+    if request.method == 'POST':
+        tracker = Track()
+        tracker.name = request.POST['name']
+        tracker.unit = request.POST['unit']
+        tracker.description = request.POST['description']
+        try:
+            with transaction.atomic():
+                tracker.save()
+        except IntegrityError:
+            return render(request, 'tracker/trackers.html', {
+                'trackers_list': Track.objects.all(),
+                'form': TrackerForm(),
+                'form_error': "Tracking with name '%s' already exists" % (request.POST['name']),
+            })
+        return HttpResponseRedirect(reverse('tracker:trackers'))
+    else:
+        form = TrackerForm()
         return render(request, 'tracker/trackers.html', {
             'trackers_list': Track.objects.all(),
-            'form': TrackerForm(),
-            'form_error': "Tracking with name '%s' already exists" % (request.POST['name']),
+            'form': form,
         })
-    return HttpResponseRedirect(reverse('tracker:trackers'))
 
 
 class TrackerDetailView(generic.DetailView):
@@ -60,20 +67,28 @@ class TrackerDetailView(generic.DetailView):
 
 def add_record(request, tracker_id):
     track = Track.objects.get(pk=tracker_id)
-    try:
-        record = Record()
-        record.track = track
-        record.value = request.POST['value']
-        record.date = datetime.strptime(request.POST['datetime'], '%Y-%m-%d %H:%M')
-        record.save()
-    except ValueError:
+    if request.method == 'POST':
+        try:
+            record = Record()
+            record.track = track
+            record.value = request.POST['value']
+            record.date = datetime.strptime(request.POST['datetime'], '%Y-%m-%d %H:%M')
+            record.save()
+        except ValueError:
+            return render(request, 'tracker/tracker.html', {
+                'track': track,
+                'record_form': RecordForm(),
+                'form_error': "Error adding record"
+            })
+
+        return HttpResponseRedirect(reverse('tracker:tracker_detail', args=(tracker_id,)))
+    else:
+        records = Record.objects.filter(track__id=track.id)
         return render(request, 'tracker/tracker.html', {
             'track': track,
             'record_form': RecordForm(),
-            'form_error': "Error adding record"
+            'records': records
         })
-
-    return HttpResponseRedirect(reverse('tracker:tracker_detail', args=(tracker_id,)))
 
 ###############
 # REST APIs
