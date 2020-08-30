@@ -60,11 +60,18 @@ class TrackerDetailView(generic.DetailView):
 
 def add_record(request, tracker_id):
     track = Track.objects.get(pk=tracker_id)
-    record = Record()
-    record.track = track
-    record.value = request.POST['value']
-    record.date = datetime.strptime(request.POST['datetime'], '%Y-%m-%d %H:%M')
-    record.save()
+    try:
+        record = Record()
+        record.track = track
+        record.value = request.POST['value']
+        record.date = datetime.strptime(request.POST['datetime'], '%Y-%m-%d %H:%M')
+        record.save()
+    except ValueError:
+        return render(request, 'tracker/tracker.html', {
+            'track': track,
+            'record_form': RecordForm(),
+            'form_error': "Error adding record"
+        })
 
     return HttpResponseRedirect(reverse('tracker:tracker_detail', args=(tracker_id,)))
 

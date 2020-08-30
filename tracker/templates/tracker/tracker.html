@@ -40,7 +40,7 @@
             <p>Unit: {{ track.unit }}</p>
             <hr />
             <div>
-                <form action="#" method="post">
+                <form action="{% url 'tracker:tracker_create_record' track.id %}" method="post">
                     {% csrf_token %}
                     {% if form_error %}
                         <div class="form-row">
@@ -58,7 +58,7 @@
                         <div class="form-group col-md-3">
                             {{ record_form.date.errors }}
                             <label for="{{ record_form.date.id_for_label }}">Date: </label>
-                            {{ record_form.date }}
+                            {{ record_form.datetime }}
                         </div>
                     </div>
                     <input type="submit" class="btn btn-primary" value="Add">
