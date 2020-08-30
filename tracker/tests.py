@@ -1,8 +1,10 @@
 import datetime
 
-from django.test import TestCase
+from django.test import TestCase, Client
 
 # Create your tests here.
+from django.urls import reverse
+
 from tracker.models import Track, Record
 
 
@@ -42,4 +44,117 @@ class RecordModelTests(TestCase):
         self.assertEqual(expected_repr, repr(record))
 
 
+####################################
+# Views tests
+####################################
+
+class TrackersViewTests(TestCase):
+
+    def test_trackers(self):
+        client = Client()
+
+        response = client.get('/tracker/')
+        content = str(response.content)
+        trackers_header = "<h1>Trackers</h1>"
+        trackers_list = '<ul id="trackers-list" class="list-group">'
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(trackers_header in content, True)
+        self.assertEqual(trackers_list in content, True)
+
+    def test_create_tracker(self):
+        client = Client()
+
+        data = {'name': 'testName', 'unit': 'g', 'description': 'testDescription'}
+        response = client.post(reverse('tracker:create_tracker'), data=data, follow=True)
+        content = str(response.content)
+        trackers_header = "<h1>Trackers</h1>"
+        trackers_list = '<ul id="trackers-list" class="list-group">'
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(trackers_header in content, True)
+        self.assertEqual(trackers_list in content, True)
+        self.assertEqual(data['name'] in content, True)
+
+    def test_create_tracker_error(self):
+        client = Client()
+
+        data = {'name': 'testName', 'unit': 'g', 'description': 'testDescription'}
+        tracker = Track(name=data['name'], unit=data['unit'], description=data['description'])
+        tracker.save()
+
+        response = client.post(reverse('tracker:create_tracker'), data=data)
+        content = str(response.content)
+        trackers_header = "<h1>Trackers</h1>"
+        trackers_list = '<ul id="trackers-list" class="list-group">'
+        error_msg = "Tracking with name &#39;%s&#39; already exists" % (data['name'])
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(trackers_header in content, True)
+        self.assertEqual(trackers_list in content, True)
+        self.assertEqual(error_msg in content, True)
+
+    def test_create_tracker_get(self):
+        client = Client()
+
+        response = client.get(reverse('tracker:create_tracker'))
+        content = str(response.content)
+        trackers_header = "<h1>Trackers</h1>"
+        trackers_list = '<ul id="trackers-list" class="list-group">'
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(trackers_header in content, True)
+        self.assertEqual(trackers_list in content, True)
+
+
+class TrackerDetailViewTests(TestCase):
+
+    def test_tracker_detail(self):
+        tracker = Track(name='testName', unit='g', description='testDescription')
+        tracker.save()
+
+        client = Client()
+        response = client.get('/tracker/%s/' % tracker.id)
+        content = str(response.content)
+        trackers_header = "<h2>%s</h2>" % tracker.name
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(trackers_header in content, True)
+
+    def test_tracker_create_record(self):
+        tracker = Track(name='testName', unit='g', description='testDescription')
+        tracker.save()
+
+        client = Client()
+        data = {'value': 15, 'datetime': '2050-01-01 12:30'}
+        response = client.post('/tracker/%s/create_record' % tracker.id, data, follow=True)
+        content = str(response.content)
+        trackers_header = "<h2>%s</h2>" % tracker.name
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(trackers_header in content, True)
+        self.assertEqual(str(data['value']) in content, True)
+        self.assertEqual(data['datetime'] in content, True)
+
+    def test_tracker_create_record_get(self):
+        tracker = Track(name='testName', unit='g', description='testDescription')
+        tracker.save()
+
+        client = Client()
+        response = client.get('/tracker/%s/create_record' % tracker.id)
+        content = str(response.content)
+        trackers_header = "<h2>%s</h2>" % tracker.name
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(trackers_header in content, True)
+
+    def test_tracker_create_record_error(self):
+        tracker = Track(name='testName', unit='g', description='testDescription')
+        tracker.save()
+
+        client = Client()
+        data = {'value': 15, 'datetime': '2050'}
+        response = client.post('/tracker/%s/create_record' % tracker.id, data, follow=True)
+        content = str(response.content)
+        trackers_header = "<h2>%s</h2>" % tracker.name
+        error_msg = "Error adding record"
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(trackers_header in content, True)
+        self.assertEqual(error_msg in content, True)
 
