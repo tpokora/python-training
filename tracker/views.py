@@ -30,14 +30,16 @@ class TrackersView(generic.ListView):
 
 
 def create_tracker(request):
-    if request.method == 'POST':
+    new_track_form = TrackerForm(request.POST)
+    if request.method == 'POST' and new_track_form.is_valid():
         tracker = Track()
         tracker.name = request.POST['name']
         tracker.unit = request.POST['unit']
         tracker.description = request.POST['description']
         try:
             with transaction.atomic():
-                tracker.save()
+                tracker
+                # tracker.save()
         except IntegrityError:
             return render(request, 'tracker/trackers.html', {
                 'trackers_list': Track.objects.all(),
@@ -46,11 +48,19 @@ def create_tracker(request):
             })
         return HttpResponseRedirect(reverse('tracker:trackers'))
     else:
-        form = TrackerForm()
-        return render(request, 'tracker/trackers.html', {
+        fields = {
             'trackers_list': Track.objects.all(),
-            'form': form,
-        })
+            'form': new_track_form,
+        }
+
+        if new_track_form.errors.get('name'):
+            fields['name_error'] = new_track_form.errors.get('name')[0]
+        if new_track_form.errors.get('unit'):
+            fields['unit_error'] = new_track_form.errors.get('unit')[0]
+        if new_track_form.errors.get('description'):
+            fields['description_error'] = new_track_form.errors.get('description')[0]
+
+        return render(request, 'tracker/trackers.html', fields)
 
 
 class TrackerDetailView(generic.DetailView):
@@ -66,8 +76,9 @@ class TrackerDetailView(generic.DetailView):
 
 
 def add_record(request, tracker_id):
+    new_record_form = RecordForm(request.POST)
     track = Track.objects.get(pk=tracker_id)
-    if request.method == 'POST':
+    if request.method == 'POST' and new_record_form.is_valid():
         try:
             record = Record()
             record.track = track
@@ -84,11 +95,16 @@ def add_record(request, tracker_id):
         return HttpResponseRedirect(reverse('tracker:tracker_detail', args=(tracker_id,)))
     else:
         records = Record.objects.filter(track__id=track.id)
-        return render(request, 'tracker/tracker.html', {
+        fields = {
             'track': track,
-            'record_form': RecordForm(),
-            'records': records
-        })
+            'record_form': new_record_form,
+            'records': records,
+        }
+        if new_record_form.errors.get('value'):
+            fields['value_error'] = new_record_form.errors['value'][0]
+        if new_record_form.errors.get('datetime'):
+            fields['datetime_error'] = new_record_form.errors['datetime'][0]
+        return render(request, 'tracker/tracker.html', fields)
 
 ###############
 # REST APIs
