@@ -38,8 +38,7 @@ def create_tracker(request):
         tracker.description = request.POST['description']
         try:
             with transaction.atomic():
-                tracker
-                # tracker.save()
+                tracker.save()
         except IntegrityError:
             return render(request, 'tracker/trackers.html', {
                 'trackers_list': Track.objects.all(),

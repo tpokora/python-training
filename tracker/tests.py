@@ -153,7 +153,7 @@ class TrackerDetailViewTests(TestCase):
         response = client.post('/tracker/%s/create_record' % tracker.id, data, follow=True)
         content = str(response.content)
         trackers_header = "<h2>%s</h2>" % tracker.name
-        error_msg = "Error adding record"
+        error_msg = "Enter a valid date/time."
         self.assertEqual(response.status_code, 200)
         self.assertEqual(trackers_header in content, True)
         self.assertEqual(error_msg in content, True)
