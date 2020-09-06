@@ -13,6 +13,6 @@ class TrackerForm(forms.Form):
 class RecordForm(forms.Form):
     value = forms.FloatField(label='Value', required=True,
                              widget=forms.TextInput(attrs={'class': 'form-control'}))
-    datetime = forms.DateTimeField(label='Datetime', required=True, input_formats=['%Y-%m-%d %H:%M'],
+    datetime = forms.DateTimeField(label='Datetime', required=True, input_formats=['%Y-%m-%d %H:%M', '%Y-%m-%d'],
                                    widget=forms.TextInput(
-                                       attrs={'class': 'form-control', 'placeholder': 'YYYY-MM-DD HH:MM'}))
+                                       attrs={'class': 'form-control', 'placeholder': 'YYYY-MM-DD (HH:MM)'}))
