@@ -91,7 +91,7 @@
                         data: {
                             datasets: [{
                                 data: {{ chart_data|safe }},
-                                label: 'Weight'
+                                label: '{{ track.unit }}'
                             }],
                             labels: {{ chart_labels|safe }}
                         },
