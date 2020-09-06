@@ -67,8 +67,17 @@ class TrackerDetailView(generic.DetailView):
     template_name = 'tracker/tracker.html'
 
     def get_context_data(self, **kwargs):
+        labels = []
+        data = []
         context = super(TrackerDetailView, self).get_context_data(**kwargs)
         records = Record.objects.filter(track__id=context['track'].id)
+
+        for record in records:
+            labels.append(record.date.strftime("%Y-%m-%d"))
+            data.append(record.value)
+
+        context['chart_labels'] = labels
+        context['chart_data'] = data
         context['records'] = records
         context['record_form'] = RecordForm()
         return context

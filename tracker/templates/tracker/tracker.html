@@ -82,6 +82,30 @@
                     {% endfor %}
                     </tbody>
                 </table>
+                <hr />
+                <canvas id="tracker-chart"></canvas>
+                <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+                <script>
+                    const trackLineChartConfig = {
+                        type: 'line',
+                        data: {
+                            datasets: [{
+                                data: {{ chart_data|safe }},
+                                label: 'Weight'
+                            }],
+                            labels: {{ chart_labels|safe }}
+                        },
+                        options: {
+                            responsive: true
+                        }
+                    };
+
+                    window.onload = function() {
+                        const ctx = document.getElementById('tracker-chart').getContext('2d')
+                        window.lineChart = new Chart(ctx, trackLineChartConfig);
+                    };
+                </script>
+                <hr />
             {% else %}
                 <h3>No records found</h3>
             {% endif %}
