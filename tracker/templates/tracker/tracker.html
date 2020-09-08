@@ -39,6 +39,7 @@
             <h5>Description: {{ track.description }}</h5>
             <p>Unit: {{ track.unit }}</p>
             <hr />
+            {% if request.user.id is not None %}
             <div>
                 <form action="{% url 'tracker:tracker_create_record' track.id %}" method="post">
                     {% csrf_token %}
@@ -65,6 +66,7 @@
                 </form>
             </div>
             <hr />
+            {% endif %}
             {% if records %}
                 <table class="table">
                     <thead>
