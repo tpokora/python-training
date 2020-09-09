@@ -1,14 +1,16 @@
 import datetime
 
-from django.test import TestCase, Client
+from django.contrib.auth.models import User
+from django.test import Client
 
 # Create your tests here.
 from django.urls import reverse
 
+from core.tests import BasicTestCase
 from tracker.models import Track, Record
 
 
-class TrackModelTests(TestCase):
+class TrackModelTests(BasicTestCase):
 
     def test_create_track(self):
         name = 'Test name'
@@ -26,7 +28,7 @@ class TrackModelTests(TestCase):
         self.assertEqual(expected_repr, repr(track))
 
 
-class RecordModelTests(TestCase):
+class RecordModelTests(BasicTestCase):
 
     def test_create_record(self):
         track = Track(name='name', unit='unit', description='description')
@@ -48,7 +50,7 @@ class RecordModelTests(TestCase):
 # Views tests
 ####################################
 
-class TrackersViewTests(TestCase):
+class TrackersViewTests(BasicTestCase):
 
     def test_trackers(self):
         client = Client()
@@ -76,7 +78,9 @@ class TrackersViewTests(TestCase):
         self.assertEqual(data['name'] in content, True)
 
     def test_create_tracker_error(self):
+        self.create_test_user(self.TEST_USER, self.TEST_USER_PASSWORD)
         client = Client()
+        logged_in = client.login(username=self.TEST_USER, password=self.TEST_USER_PASSWORD)
 
         data = {'name': 'testName', 'unit': 'g', 'description': 'testDescription'}
         tracker = Track(name=data['name'], unit=data['unit'], description=data['description'])
@@ -106,7 +110,7 @@ class TrackersViewTests(TestCase):
         self.assertEqual(trackers_list in content, True)
 
 
-class TrackerDetailViewTests(TestCase):
+class TrackerDetailViewTests(BasicTestCase):
 
     def test_tracker_detail(self):
         tracker = Track(name='testName', unit='g', description='testDescription')
@@ -145,10 +149,13 @@ class TrackerDetailViewTests(TestCase):
         self.assertEqual(trackers_header in content, True)
 
     def test_tracker_create_record_error(self):
+        self.create_test_user(self.TEST_USER, self.TEST_USER_PASSWORD)
         tracker = Track(name='testName', unit='g', description='testDescription')
         tracker.save()
 
         client = Client()
+        logged_in = client.login(username=self.TEST_USER, password=self.TEST_USER_PASSWORD)
+
         data = {'value': 15, 'datetime': '2050'}
         response = client.post('/tracker/%s/create_record' % tracker.id, data, follow=True)
         content = str(response.content)
@@ -157,4 +164,3 @@ class TrackerDetailViewTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(trackers_header in content, True)
         self.assertEqual(error_msg in content, True)
-
