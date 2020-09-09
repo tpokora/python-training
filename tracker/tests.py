@@ -78,7 +78,7 @@ class TrackersViewTests(BasicTestCase):
         self.assertEqual(data['name'] in content, True)
 
     def test_create_tracker_error(self):
-        self.create_test_user(self.TEST_USER, self.TEST_USER_PASSWORD)
+        self._create_test_user(self.TEST_USER, self.TEST_USER_PASSWORD)
         client = Client()
         logged_in = client.login(username=self.TEST_USER, password=self.TEST_USER_PASSWORD)
 
@@ -149,7 +149,7 @@ class TrackerDetailViewTests(BasicTestCase):
         self.assertEqual(trackers_header in content, True)
 
     def test_tracker_create_record_error(self):
-        self.create_test_user(self.TEST_USER, self.TEST_USER_PASSWORD)
+        self._create_test_user(self.TEST_USER, self.TEST_USER_PASSWORD)
         tracker = Track(name='testName', unit='g', description='testDescription')
         tracker.save()
 

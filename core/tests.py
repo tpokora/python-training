@@ -8,7 +8,7 @@ class BasicTestCase(TestCase):
     TEST_USER = 'testUser'
     TEST_USER_PASSWORD = '12345'
 
-    def create_test_user(self, username, password):
+    def _create_test_user(self, username, password):
         user = User.objects.create(username=username)
         user.set_password(password)
         user.save()
