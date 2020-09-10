@@ -1,6 +1,46 @@
-<h2>Login</h2>
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Login</button>
-</form>
+<!DOCTYPE html>
+<html lang="en">
+
+{# Load the tag library #}
+{% load bootstrap4 %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full' %}
+
+{# Display django.contrib.messages as Bootstrap alerts #}
+{% bootstrap_messages %}
+
+<head>
+    <title>Home Page - training-python</title>
+    <meta charset="utf-8"/>
+    {% load static %}
+    <link rel="stylesheet" type="text/css">
+    <link rel="stylesheet"  href="{%  static  'css/login.css'  %}">
+</head>
+
+<body class="body" style="background-color:#f6f6f6">
+
+
+<div class="container">
+    <!-- Login Form -->
+    <div class="login-form">
+        <form method="post">
+            <h2 class="text-center">Log in</h2>
+            {% csrf_token %}
+            {{ form.as_p }}
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary btn-block">Log in</button>
+            </div>
+            <div class="clearfix">
+                <label class="float-left form-check-label"><input type="checkbox"> Remember me</label>
+                <a href="#" class="float-right">Forgot Password?</a>
+            </div>
+        </form>
+        <p class="text-center"><a href="#">Create an Account</a></p>
+    </div>
+
+</div>
+</body>
+
+</html>

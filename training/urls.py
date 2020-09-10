@@ -18,10 +18,13 @@ from django.contrib import admin
 from django.urls import path, include
 from django.contrib.auth import views as auth_views
 
+from core.views import LoginForm
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('core.urls')),
-    url(r'^login/$', auth_views.LoginView.as_view(template_name='home/login.html'), name='login'),
+    url(r'^login/$', auth_views.LoginView.as_view(template_name='home/login.html', authentication_form=LoginForm),
+        name='login'),
     url(r'^logout/$', auth_views.LogoutView.as_view(next_page='/'), name='logout'),
     path('weather/', include('weather_statistics.urls')),
     path('tracker/', include(('tracker.urls', 'tracker'), namespace='tracker'))

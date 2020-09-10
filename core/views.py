@@ -1,6 +1,7 @@
 # Create your views here.
+from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User, Group
-from django.contrib.auth.views import LoginView
+from django import forms
 from django.views.generic import TemplateView
 from rest_framework import viewsets
 
@@ -33,3 +34,16 @@ class GroupViewSet(viewsets.ModelViewSet):
     """
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
+
+
+class LoginForm(AuthenticationForm):
+
+    def __init__(self, *args, **kwargs):
+        super(LoginForm, self).__init__(*args, **kwargs)
+
+    username = forms.CharField(widget=forms.TextInput(
+        attrs={'class': 'form-control'}
+    ))
+    password = forms.CharField(widget=forms.PasswordInput(
+        attrs={'class': 'form-control'}
+    ))
