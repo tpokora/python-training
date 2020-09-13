@@ -34,15 +34,17 @@ class RecordModelTests(BasicTestCase):
         track = Track(name='name', unit='unit', description='description')
         value = 11.1
         date = datetime.datetime.now()
-        record = Record(track=track, value=value, date=date)
+        note = 'test note'
+        record = Record(track=track, value=value, date=date, note=note)
 
         self.assertEqual(str(track), str(record.track))
         self.assertEqual(value, record.value)
         self.assertEqual(date, record.date)
+        self.assertEqual(note, record.note)
 
-        expected_string = "Record{value='%s', date='%s'}" % (value, date.strftime('%Y-%m-%d'))
+        expected_string = "Record{value='%s', date='%s', note='%s'}" % (value, date.strftime('%Y-%m-%d'), note)
         self.assertEqual(expected_string, str(record))
-        expected_repr = "<Record: Record{value='%s', date='%s'}>" % (value, date.strftime('%Y-%m-%d'))
+        expected_repr = "<Record: Record{value='%s', date='%s', note='%s'}>" % (value, date.strftime('%Y-%m-%d'), note)
         self.assertEqual(expected_repr, repr(record))
 
 
@@ -119,7 +121,7 @@ class TrackerDetailViewTests(BasicTestCase):
         tracker.save()
 
         client = Client()
-        data = {'value': 15, 'datetime': '2050-01-01 12:30'}
+        data = {'value': 15, 'datetime': '2050-01-01 12:30', 'note': 'test note'}
         response = client.post('/tracker/%s/create_record' % tracker.id, data, follow=True)
         content = str(response.content)
         trackers_header = "<h2>%s</h2>" % tracker.name
@@ -127,6 +129,7 @@ class TrackerDetailViewTests(BasicTestCase):
         self.assertEqual(trackers_header in content, True)
         self.assertEqual(str(data['value']) in content, True)
         self.assertEqual(data['datetime'] in content, True)
+        self.assertEqual(data['note'] in content, True)
 
     def test_tracker_create_record_get(self):
         tracker = Track(name='testName', unit='g', description='testDescription')

@@ -92,6 +92,7 @@ def add_record(request, tracker_id):
             record.track = track
             record.value = request.POST['value']
             record.date = request.POST['datetime']
+            record.note = request.POST['note']
             record.save()
         except ValueError:
             return render(request, 'tracker/tracker.html', {

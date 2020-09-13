@@ -15,6 +15,7 @@ class Record(models.Model):
     track = models.ForeignKey(Track, on_delete=models.CASCADE)
     value = models.FloatField(default=0.0)
     date = models.DateTimeField()
+    note = models.CharField(max_length=200, blank=True, default='')
 
     def __str__(self):
-        return "Record{value='%s', date='%s'}" % (self.value, self.date.__format__('%Y-%m-%d'))
+        return "Record{value='%s', date='%s', note='%s'}" % (self.value, self.date.__format__('%Y-%m-%d'), self.note)

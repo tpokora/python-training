@@ -16,3 +16,6 @@ class RecordForm(forms.Form):
     datetime = forms.DateTimeField(label='Datetime', required=True, input_formats=['%Y-%m-%d %H:%M', '%Y-%m-%d'],
                                    widget=forms.TextInput(
                                        attrs={'class': 'form-control', 'placeholder': 'YYYY-MM-DD (HH:MM)'}))
+    note = forms.CharField(label='Note', required=False,
+                           widget=forms.TextInput(
+                               attrs={'class': 'form-control', 'placeholder': 'Optional'}))
