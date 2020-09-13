@@ -53,6 +53,9 @@ class RecordModelTests(BasicTestCase):
 class TrackersViewTests(BasicTestCase):
 
     def test_trackers(self):
+        test_track = Track(name='testTrack', unit='g', description='test')
+        test_track.save()
+
         client = Client()
 
         response = client.get('/tracker/')
@@ -96,18 +99,6 @@ class TrackersViewTests(BasicTestCase):
         self.assertEqual(trackers_header in content, True)
         self.assertEqual(trackers_list in content, True)
         self.assertEqual(error_msg in content, True)
-
-    def test_create_tracker_get(self):
-        client = Client()
-
-        response = client.get(reverse('tracker:create_tracker'))
-        content = str(response.content)
-        trackers_header = "<h1>Trackers</h1>"
-        trackers_list = '<ul id="trackers-list" class="list-group">'
-
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(trackers_header in content, True)
-        self.assertEqual(trackers_list in content, True)
 
 
 class TrackerDetailViewTests(BasicTestCase):
